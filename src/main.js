@@ -39,106 +39,300 @@ const lucideScript = injectResource('script', {
 
 document.querySelector('#app').innerHTML = `
 <style>
-  body { font-family: 'DM Sans', sans-serif; }
+  :root {
+    --slate-950: #020617;
+    --slate-900: #0f172a;
+    --slate-800: #1e293b;
+    --slate-700: #334155;
+    --amber-400: #fbbf24;
+    --amber-300: #fcd34d;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; background: var(--slate-950); }
+  body {
+    margin: 0;
+    font-family: 'DM Sans', sans-serif;
+    color: #e2e8f0;
+    background:
+      radial-gradient(circle at top left, rgba(251, 191, 36, 0.16), transparent 28%),
+      radial-gradient(circle at top right, rgba(148, 163, 184, 0.12), transparent 26%),
+      linear-gradient(180deg, #020617 0%, #0f172a 38%, #020617 100%);
+  }
+
   .font-display { font-family: 'Playfair Display', serif; }
-  .hero-overlay { background: linear-gradient(to bottom, rgba(15,23,42,0.5), rgba(15,23,42,0.85)); }
-  .prop-card:hover { transform: translateY(-4px); }
-  .prop-card { transition: transform 0.3s ease; }
-  html { scroll-behavior: smooth; }
+  .page-shell {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .page-shell::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: radial-gradient(rgba(148, 163, 184, 0.08) 1px, transparent 1px);
+    background-size: 24px 24px;
+    opacity: 0.18;
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  .topbar {
+    background: rgba(2, 6, 23, 0.82);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(51, 65, 85, 0.65);
+  }
+
+  .hero-card,
+  .feature-card,
+  .contact-card,
+  .property-card,
+  .info-card {
+    background: rgba(15, 23, 42, 0.78);
+    border: 1px solid rgba(51, 65, 85, 0.8);
+    box-shadow: 0 24px 60px rgba(2, 6, 23, 0.28);
+    backdrop-filter: blur(16px);
+  }
+
+  .hero-image {
+    min-height: 680px;
+    background-image:
+      linear-gradient(180deg, rgba(2, 6, 23, 0.18), rgba(2, 6, 23, 0.88)),
+      url('https://images.pexels.com/photos/6493861/pexels-photo-6493861.jpeg?auto=compress&cs=tinysrgb&w=1920');
+    background-position: center;
+    background-size: cover;
+  }
+
+  .section-title {
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--amber-400);
+    font-size: 0.75rem;
+    font-weight: 700;
+  }
+
+  .soft-chip {
+    border: 1px solid rgba(251, 191, 36, 0.18);
+    background: rgba(251, 191, 36, 0.08);
+    color: #fde68a;
+  }
+
+  .prop-card {
+    transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+  }
+  .prop-card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(251, 191, 36, 0.3);
+    box-shadow: 0 26px 60px rgba(2, 6, 23, 0.4);
+  }
+
   #viewing-modal { transition: opacity 0.3s; }
   #viewing-modal.hidden { opacity: 0; pointer-events: none; }
+
+  .nav-link {
+    color: #cbd5e1;
+    transition: color 0.2s ease;
+  }
+  .nav-link:hover { color: #fbbf24; }
+
+  .hero-badge {
+    border: 1px solid rgba(251, 191, 36, 0.22);
+    background: rgba(2, 6, 23, 0.5);
+    backdrop-filter: blur(12px);
+  }
 </style>
-<div data-template-id="__page-root" class="w-full min-h-screen bg-slate-900 text-white" style="background: rgb(15, 23, 42);">
-  <nav class="sticky top-0 w-full z-50 bg-slate-900/90 backdrop-blur-sm border-b border-slate-800">
-   <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-    <a href="#" data-template-id="nav-brand" class="canva-text font-display font-bold text-lg" style="color: rgb(251, 191, 36); font-weight: 700; font-style: normal; font-size: 16px;">Jewel Villafranca</a>
+<div data-template-id="__page-root" class="page-shell w-full min-h-screen text-white">
+  <nav class="topbar sticky top-0 w-full z-50">
+   <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between gap-4">
+    <a href="#" data-template-id="nav-brand" class="font-display font-bold tracking-wide text-lg text-white" style="font-size: 18px;">Jewel Villafranca</a>
     <div class="hidden md:flex items-center gap-8">
-     <a href="#about" data-template-id="nav-about" class="canva-link text-sm hover:text-amber-400 transition-colors" style="color: rgb(226, 232, 240); font-weight: 400; font-style: normal; font-size: 16px;">About</a> <a href="#properties" data-template-id="nav-properties" class="canva-link text-sm hover:text-amber-400 transition-colors" style="color: rgb(226, 232, 240); font-weight: 400; font-style: normal; font-size: 16px;">Properties</a> <a href="#services" data-template-id="nav-services" class="canva-link text-sm hover:text-amber-400 transition-colors" style="color: rgb(226, 232, 240); font-weight: 400; font-style: normal; font-size: 16px;">Services</a> <a href="#contact" data-template-id="nav-contact" class="canva-link text-sm hover:text-amber-400 transition-colors" style="color: rgb(226, 232, 240); font-weight: 400; font-style: normal; font-size: 16px;">Contact</a>
+     <a href="#about" data-template-id="nav-about" class="nav-link text-sm">About</a>
+     <a href="#properties" data-template-id="nav-properties" class="nav-link text-sm">Properties</a>
+     <a href="#services" data-template-id="nav-services" class="nav-link text-sm">Services</a>
+     <a href="#contact" data-template-id="nav-contact" class="nav-link text-sm">Contact</a>
     </div><button id="mobile-menu-btn" class="md:hidden text-white" aria-label="Open menu"><i data-lucide="menu" style="width:24px;height:24px;"></i></button>
    </div>
-   <div id="mobile-menu" class="hidden md:hidden px-6 pb-4 space-y-3">
-    <a href="#about" class="block text-sm hover:text-amber-400">About</a> <a href="#properties" class="block text-sm hover:text-amber-400">Properties</a> <a href="#services" class="block text-sm hover:text-amber-400">Services</a> <a href="#contact" class="block text-sm hover:text-amber-400">Contact</a>
+   <div id="mobile-menu" class="hidden md:hidden px-6 pb-4 space-y-3 border-t border-slate-800/80 bg-slate-950/90">
+    <a href="#about" class="block text-sm nav-link">About</a> <a href="#properties" class="block text-sm nav-link">Properties</a> <a href="#services" class="block text-sm nav-link">Services</a> <a href="#contact" class="block text-sm nav-link">Contact</a>
    </div>
   </nav>
-  <header class="relative w-full" style="height: calc(90 * min(var(--vh, 1vh), 1vh));">
-   <img data-template-id="hero-image" loading="lazy" class="canva-image absolute inset-0 w-full h-full object-cover" src="https://images.pexels.com/photos/6493861/pexels-photo-6493861.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=1920" alt="Breathtaking aerial view of Tagaytay's lush highlands and winding roads overlooking Taal Lake">
-   <div class="hero-overlay absolute inset-0 flex flex-col items-center justify-center text-center px-6">
-    <p data-template-id="hero-tagline" class="canva-text uppercase tracking-[0.25em] text-sm mb-4" style="color: rgb(251, 191, 36); font-weight: 500; font-style: normal; font-size: 14px;">Tagaytay Highlands</p>
-    <h1 data-template-id="hero-title" class="canva-text font-display font-bold max-w-3xl leading-tight" style="color: rgb(255, 255, 255); font-weight: 700; font-style: normal; font-size: 48px;">Your Dream Property Awaits in Tagaytay</h1>
-    <p data-template-id="hero-subtitle" class="canva-text mt-6 max-w-xl opacity-90" style="color: rgb(226, 232, 240); font-weight: 400; font-style: normal; font-size: 18px;">Exclusive lots, homes, and condominiums curated by your trusted highlands specialist.</p><button data-template-id="hero-cta" onclick="openViewingModal('')" class="canva-button mt-8 inline-block px-8 py-3 border-2 border-amber-400 text-amber-400 hover:bg-amber-400 hover:text-slate-900 transition-colors font-medium tracking-wide" style="color: rgb(251, 191, 36); font-weight: 500; font-style: normal; font-size: 16px;">Schedule a Viewing</button>
+  <header class="relative overflow-hidden">
+   <div class="hero-image absolute inset-0"></div>
+   <div class="absolute inset-0 bg-gradient-to-b from-slate-950/35 via-slate-950/55 to-slate-950"></div>
+   <div class="relative max-w-7xl mx-auto px-6 py-14 lg:py-20">
+    <div class="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] items-center min-h-[680px]">
+     <div class="max-w-3xl">
+      <div class="hero-badge inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs uppercase tracking-[0.28em] text-amber-200">
+       Tagaytay Highlands Property Specialist
+      </div>
+      <h1 data-template-id="hero-title" class="font-display mt-6 max-w-2xl text-5xl font-bold leading-[1.05] text-white sm:text-6xl lg:text-7xl">Curated Highlands Properties, Presented with Clarity</h1>
+      <p data-template-id="hero-subtitle" class="mt-6 max-w-xl text-lg leading-8 text-slate-300 sm:text-xl">Explore premium lots, homes, and condominiums in Tagaytay with a refined presentation, clear availability, and direct contact options.</p>
+      <div class="mt-8 flex flex-wrap gap-3">
+       <button data-template-id="hero-cta" onclick="openViewingModal('')" class="inline-flex items-center justify-center rounded-full bg-amber-400 px-7 py-3 text-sm font-bold text-slate-950 transition hover:bg-amber-300">Schedule a Viewing</button>
+       <a href="#properties" class="inline-flex items-center justify-center rounded-full border border-slate-700 bg-slate-900/60 px-7 py-3 text-sm font-semibold text-slate-100 transition hover:border-amber-400/40 hover:text-amber-200">View Properties</a>
+      </div>
+      <div class="mt-10 grid max-w-2xl grid-cols-3 gap-4">
+       <div class="hero-badge rounded-2xl p-4">
+        <p class="text-2xl font-bold text-white">6+</p>
+        <p class="mt-1 text-xs uppercase tracking-[0.2em] text-slate-400">Featured Listings</p>
+       </div>
+       <div class="hero-badge rounded-2xl p-4">
+        <p class="text-2xl font-bold text-white">Tagaytay</p>
+        <p class="mt-1 text-xs uppercase tracking-[0.2em] text-slate-400">Prime Highlands Location</p>
+       </div>
+       <div class="hero-badge rounded-2xl p-4">
+        <p class="text-2xl font-bold text-white">Fast</p>
+        <p class="mt-1 text-xs uppercase tracking-[0.2em] text-slate-400">Direct Inquiry Support</p>
+       </div>
+      </div>
+     </div>
+     <div class="lg:justify-self-end">
+      <div class="hero-card rounded-[2rem] p-6 sm:p-8">
+       <p class="section-title">Featured Snapshot</p>
+       <div class="mt-4 overflow-hidden rounded-[1.5rem] border border-slate-700/70">
+        <img data-template-id="hero-image" loading="lazy" class="h-[340px] w-full object-cover" src="https://images.pexels.com/photos/6493861/pexels-photo-6493861.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=1920" alt="Breathtaking aerial view of Tagaytay's lush highlands and winding roads overlooking Taal Lake">
+       </div>
+       <div class="mt-6 grid gap-4 sm:grid-cols-2">
+        <div class="info-card rounded-2xl p-4">
+         <p class="text-sm text-slate-400">Service Area</p>
+         <p class="mt-2 text-lg font-semibold text-white">Tagaytay Highlands</p>
+        </div>
+        <div class="info-card rounded-2xl p-4">
+         <p class="text-sm text-slate-400">Contact</p>
+         <p class="mt-2 text-lg font-semibold text-white">Direct Viber Support</p>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
    </div>
   </header>
   <main>
-   <section id="about" class="max-w-6xl mx-auto px-6 py-20 grid md:grid-cols-2 gap-12 items-center">
-    <img data-template-id="agent-portrait" loading="lazy" class="canva-image w-full max-w-sm mx-auto rounded-lg shadow-2xl aspect-[3/4] object-cover" src="canva://MAHNWzUGNqE/1" alt="699431026_1446534424154932_6118603240397610858_n.jpg">
-    <div>
-     <h2 data-template-id="about-heading" class="canva-text font-display font-bold mb-4" style="color: rgb(251, 191, 36); font-weight: 700; font-style: normal; font-size: 24px;">About Me</h2>
-     <p data-template-id="about-name" class="canva-text font-bold mb-1" style="color: rgb(255, 255, 255); font-weight: 700; font-style: normal; font-size: 18px;">JEWEL B. VILLAFRANCA</p>
-     <p data-template-id="about-title" class="canva-text mb-4 opacity-75" style="color: rgb(251, 191, 36); font-weight: 500; font-style: normal; font-size: 16px;">Property Specialist</p>
-     <p data-template-id="about-text" class="canva-text leading-relaxed opacity-85" style="color: rgb(203, 213, 225); font-weight: 400; font-style: normal; font-size: 16px;">With years of dedicated experience in Tagaytay Highlands real estate, I help clients find their perfect property — whether it's a serene weekend retreat, a sound investment lot, or a luxury residence with breathtaking views of Taal Lake.</p>
-     <p data-template-id="about-text-2" class="canva-text mt-4 leading-relaxed opacity-85" style="color: rgb(203, 213, 225); font-weight: 400; font-style: normal; font-size: 16px;">From site visits to paperwork, I provide end-to-end guidance so you can focus on envisioning your new life in the highlands.</p>
-     <p data-template-id="about-address" class="canva-text mt-6 text-sm opacity-60" style="color: rgb(148, 163, 184); font-weight: 400; font-style: normal; font-size: 16px;">📍 4120 Brgy. Calabuso, Tagaytay City, Cavite, Philippines</p>
-    </div>
-   </section>
-   <section id="services" data-template-id="services-section" class="canva-section py-20 px-6" style="background: rgb(30, 41, 59);">
-    <div class="max-w-6xl mx-auto">
-     <h2 data-template-id="services-heading" class="canva-text font-display font-bold text-center mb-12" style="color: rgb(255, 255, 255); font-weight: 700; font-style: normal; font-size: 24px;">My Services</h2>
-     <div class="grid md:grid-cols-3 gap-8">
-      <div data-template-id="service-1-card" class="canva-card rounded-xl overflow-hidden" style="background: rgb(15, 23, 42);">
-       <img data-template-id="service-1-img" loading="lazy" class="canva-image w-full h-44 object-cover" src="https://images.pexels.com/photos/7578899/pexels-photo-7578899.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=800" alt="Two real estate professionals shaking hands in front of a new home">
-       <div class="p-6 text-center">
-        <h3 data-template-id="service-1-title" class="canva-text font-bold mb-2" style="color: rgb(255, 255, 255); font-weight: 700; font-style: normal; font-size: 19px;">Property Buying</h3>
-        <p data-template-id="service-1-desc" class="canva-text text-sm opacity-75" style="color: rgb(203, 213, 225); font-weight: 400; font-style: normal; font-size: 16px;">Find your perfect home, lot, or condo in Tagaytay Highlands with personalized property matching.</p><a href="#contact" class="inline-block mt-4 text-amber-400 text-sm font-medium hover:underline">Inquire Now →</a>
+   <section id="about" class="max-w-7xl mx-auto px-6 py-20 lg:py-24">
+    <div class="grid gap-8 lg:grid-cols-[0.95fr_1.05fr] items-center">
+     <div class="hero-card overflow-hidden rounded-[2rem]">
+      <img data-template-id="agent-portrait" loading="lazy" class="h-full w-full object-cover" src="https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=1200" alt="Portrait of Jewel Villafranca">
+     </div>
+     <div class="space-y-6">
+      <div>
+       <p class="section-title">About Jewel</p>
+       <h2 data-template-id="about-heading" class="font-display mt-3 text-4xl font-bold text-white sm:text-5xl">A premium property presentation built around trust and clarity</h2>
+      </div>
+      <p data-template-id="about-text" class="max-w-2xl text-lg leading-8 text-slate-300">With years of dedicated experience in Tagaytay Highlands real estate, I help clients find their perfect property whether it is a serene weekend retreat, a sound investment lot, or a luxury residence with breathtaking views of Taal Lake.</p>
+      <p data-template-id="about-text-2" class="max-w-2xl text-base leading-8 text-slate-400">From site visits to paperwork, I provide end-to-end guidance so you can focus on envisioning your new life in the highlands.</p>
+      <div class="grid gap-4 sm:grid-cols-3">
+       <div class="info-card rounded-2xl p-5">
+        <p class="text-2xl font-bold text-white">6</p>
+        <p class="mt-1 text-xs uppercase tracking-[0.2em] text-slate-400">Featured Listings</p>
+       </div>
+       <div class="info-card rounded-2xl p-5">
+        <p class="text-2xl font-bold text-white">Tagaytay</p>
+        <p class="mt-1 text-xs uppercase tracking-[0.2em] text-slate-400">Specialty Area</p>
+       </div>
+       <div class="info-card rounded-2xl p-5">
+        <p class="text-2xl font-bold text-white">Direct</p>
+        <p class="mt-1 text-xs uppercase tracking-[0.2em] text-slate-400">Client Support</p>
        </div>
       </div>
-      <div data-template-id="service-2-card" class="canva-card rounded-xl overflow-hidden" style="background: rgb(15, 23, 42);">
-       <img data-template-id="service-2-img" loading="lazy" class="canva-image w-full h-44 object-cover" src="https://images.pexels.com/photos/7731330/pexels-photo-7731330.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=800" alt="Professional meeting discussing business agreements with laptops and documents">
-       <div class="p-6 text-center">
-        <h3 data-template-id="service-2-title" class="canva-text font-bold mb-2" style="color: rgb(255, 255, 255); font-weight: 700; font-style: normal; font-size: 19px;">Investment Advisory</h3>
-        <p data-template-id="service-2-desc" class="canva-text text-sm opacity-75" style="color: rgb(203, 213, 225); font-weight: 400; font-style: normal; font-size: 16px;">Get expert guidance on property investments with high appreciation potential in the highlands.</p><a href="#contact" class="inline-block mt-4 text-amber-400 text-sm font-medium hover:underline">Inquire Now →</a>
-       </div>
-      </div>
-      <div data-template-id="service-3-card" class="canva-card rounded-xl overflow-hidden" style="background: rgb(15, 23, 42);">
-       <img data-template-id="service-3-img" loading="lazy" class="canva-image w-full h-44 object-cover" src="https://images.pexels.com/photos/8293778/pexels-photo-8293778.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=800" alt="Close-up of a realtor handing over a house key to a new homeowner">
-       <div class="p-6 text-center">
-        <h3 data-template-id="service-3-title" class="canva-text font-bold mb-2" style="color: rgb(255, 255, 255); font-weight: 700; font-style: normal; font-size: 19px;">Documentation Support</h3>
-        <p data-template-id="service-3-desc" class="canva-text text-sm opacity-75" style="color: rgb(203, 213, 225); font-weight: 400; font-style: normal; font-size: 16px;">Seamless assistance with contracts, titles, and all paperwork from reservation to turnover.</p><a href="#contact" class="inline-block mt-4 text-amber-400 text-sm font-medium hover:underline">Inquire Now →</a>
-       </div>
-      </div>
+      <p data-template-id="about-address" class="text-sm text-slate-500">📍 4120 Brgy. Calabuso, Tagaytay City, Cavite, Philippines</p>
      </div>
     </div>
    </section>
-   <section id="properties" data-template-id="properties-section" class="canva-section py-20 px-6" style="background: rgb(15, 23, 42);">
-    <div class="max-w-6xl mx-auto">
-     <h2 data-template-id="properties-heading" class="canva-text font-display font-bold text-center mb-12" style="color: rgb(255, 255, 255); font-weight: 700; font-style: normal; font-size: 24px;">Featured Properties</h2>
-     <div id="properties-grid" class="grid md:grid-cols-3 gap-8"></div>
+   <section id="services" data-template-id="services-section" class="max-w-7xl mx-auto px-6 py-6 lg:py-10">
+    <div class="mb-8 flex items-end justify-between gap-4">
+     <div>
+      <p class="section-title">Services</p>
+      <h2 data-template-id="services-heading" class="font-display mt-3 text-3xl font-bold text-white sm:text-4xl">Concise support from search to signing</h2>
+     </div>
     </div>
-   </section>
-   <section id="contact" data-template-id="contact-section" class="canva-section py-20 px-6" style="background: rgb(30, 41, 59);">
-    <div class="max-w-4xl mx-auto">
-     <h2 data-template-id="contact-heading" class="canva-text font-display font-bold text-center mb-4" style="color: rgb(255, 255, 255); font-weight: 700; font-style: normal; font-size: 24px;">Ready to Invest in Tagaytay?</h2>
-     <p data-template-id="contact-text" class="canva-text text-center opacity-85 mb-10" style="color: rgb(203, 213, 225); font-weight: 400; font-style: normal; font-size: 16px;">Let's find the perfect property for you. Reach out today for a no-obligation consultation.</p>
-     <div class="grid md:grid-cols-2 gap-10">
-      <div class="space-y-5">
-       <h3 data-template-id="contact-info-heading" class="canva-text font-bold mb-4" style="color: rgb(255, 255, 255); font-weight: 700; font-style: normal; font-size: 19px;">Get In Touch</h3><a href="viber://chat?number=639750541424" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 px-5 py-3 bg-slate-800 rounded-lg hover:bg-slate-700 transition-colors"><i data-lucide="phone" style="width:20px;height:20px;color:#fbbf24;"></i><span data-template-id="contact-phone-1" class="canva-text" style="color: rgb(226, 232, 240); font-weight: 400; font-style: normal; font-size: 16px;">0975 054 1424 (Viber)</span></a> <a href="viber://chat?number=639933684179" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 px-5 py-3 bg-slate-800 rounded-lg hover:bg-slate-700 transition-colors"><i data-lucide="message-circle" style="width:20px;height:20px;color:#fbbf24;"></i><span data-template-id="contact-phone-2" class="canva-text" style="color: rgb(226, 232, 240); font-weight: 400; font-style: normal; font-size: 16px;">0993 368 4179 (Viber)</span></a> <a href="mailto:jewelvillafranca@gmail.com" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 px-5 py-3 bg-slate-800 rounded-lg hover:bg-slate-700 transition-colors"><i data-lucide="mail" style="width:20px;height:20px;color:#fbbf24;"></i><span data-template-id="contact-email" class="canva-text" style="color: rgb(251, 191, 36); font-weight: 400; font-style: normal; font-size: 16px;">jewelvillafranca@gmail.com</span></a>
-       <div class="flex items-center gap-3 px-5 py-3 bg-slate-800 rounded-lg"><i data-lucide="map-pin" style="width:20px;height:20px;color:#fbbf24;"></i><span data-template-id="contact-address" class="canva-text text-sm" style="color: rgb(203, 213, 225); font-weight: 400; font-style: normal; font-size: 16px;">4120 Brgy. Calabuso, Tagaytay City, Cavite, Philippines</span>
+    <div class="grid gap-6 lg:grid-cols-3">
+      <div data-template-id="service-1-card" class="feature-card rounded-[1.75rem] overflow-hidden">
+       <div class="h-56 overflow-hidden">
+        <img data-template-id="service-1-img" loading="lazy" class="h-full w-full object-cover" src="https://images.pexels.com/photos/7578899/pexels-photo-7578899.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=1000" alt="Two real estate professionals shaking hands in front of a new home">
+       </div>
+       <div class="p-6">
+        <h3 data-template-id="service-1-title" class="text-xl font-bold text-white">Property Buying</h3>
+        <p data-template-id="service-1-desc" class="mt-3 leading-7 text-slate-300">Find your perfect home, lot, or condo in Tagaytay Highlands with personalized property matching.</p>
        </div>
       </div>
-      <form id="contact-form" class="space-y-4">
-       <div><label data-template-id="form-name-label" for="form-name" class="canva-text block text-sm mb-1" style="color: rgb(203, 213, 225); font-weight: 400; font-style: normal; font-size: 16px;">Your Name</label><input id="form-name" type="text" required="" class="w-full px-4 py-3 rounded-lg bg-slate-800 border border-slate-700 text-white focus:border-amber-400 focus:outline-none">
+      <div data-template-id="service-2-card" class="feature-card rounded-[1.75rem] overflow-hidden">
+       <div class="h-56 overflow-hidden">
+        <img data-template-id="service-2-img" loading="lazy" class="h-full w-full object-cover" src="https://images.pexels.com/photos/7731330/pexels-photo-7731330.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=1000" alt="Professional meeting discussing business agreements with laptops and documents">
        </div>
-       <div><label data-template-id="form-email-label" for="form-email" class="canva-text block text-sm mb-1" style="color: rgb(203, 213, 225); font-weight: 400; font-style: normal; font-size: 16px;">Your Email</label><input id="form-email" type="email" required="" class="w-full px-4 py-3 rounded-lg bg-slate-800 border border-slate-700 text-white focus:border-amber-400 focus:outline-none">
+       <div class="p-6">
+        <h3 data-template-id="service-2-title" class="text-xl font-bold text-white">Investment Advisory</h3>
+        <p data-template-id="service-2-desc" class="mt-3 leading-7 text-slate-300">Get expert guidance on property investments with high appreciation potential in the highlands.</p>
        </div>
-       <div><label data-template-id="form-message-label" for="form-message" class="canva-text block text-sm mb-1" style="color: rgb(203, 213, 225); font-weight: 400; font-style: normal; font-size: 16px;">Your Message</label><textarea id="form-message" rows="4" required="" class="w-full px-4 py-3 rounded-lg bg-slate-800 border border-slate-700 text-white focus:border-amber-400 focus:outline-none resize-none"></textarea>
-       </div><button data-template-id="form-submit-btn" type="submit" class="canva-button w-full px-6 py-3 bg-amber-400 text-slate-900 font-bold rounded-lg hover:bg-amber-300 transition-colors" style="background: rgb(251, 191, 36); color: rgb(15, 23, 42); font-weight: 700; font-style: normal; font-size: 16px;">Send Message</button>
-       <p id="form-success" class="hidden text-green-400 text-sm text-center mt-2">Message sent! Opening your email client...</p>
+      </div>
+      <div data-template-id="service-3-card" class="feature-card rounded-[1.75rem] overflow-hidden">
+       <div class="h-56 overflow-hidden">
+        <img data-template-id="service-3-img" loading="lazy" class="h-full w-full object-cover" src="https://images.pexels.com/photos/8293778/pexels-photo-8293778.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=1000" alt="Close-up of a realtor handing over a house key to a new homeowner">
+       </div>
+       <div class="p-6">
+        <h3 data-template-id="service-3-title" class="text-xl font-bold text-white">Documentation Support</h3>
+        <p data-template-id="service-3-desc" class="mt-3 leading-7 text-slate-300">Seamless assistance with contracts, titles, and all paperwork from reservation to turnover.</p>
+       </div>
+      </div>
+     </div>
+   </section>
+   <section id="properties" data-template-id="properties-section" class="max-w-7xl mx-auto px-6 py-20 lg:py-24">
+    <div class="mb-10 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+     <div>
+      <p class="section-title">Featured Properties</p>
+      <h2 data-template-id="properties-heading" class="font-display mt-3 text-3xl font-bold text-white sm:text-4xl">Current listings in the Highlands</h2>
+     </div>
+     <p class="max-w-xl text-sm leading-7 text-slate-400">Tap a listing to view the gallery and availability details. Sold out items are clearly marked with a visual overlay.</p>
+    </div>
+    <div id="properties-grid" class="grid gap-6 md:grid-cols-2 xl:grid-cols-3"></div>
+   </section>
+   <section id="contact" data-template-id="contact-section" class="max-w-7xl mx-auto px-6 pb-20 lg:pb-24">
+    <div class="contact-card grid gap-8 rounded-[2rem] p-6 lg:grid-cols-[0.9fr_1.1fr] lg:p-8">
+     <div class="space-y-6">
+      <p class="section-title">Contact</p>
+      <h2 data-template-id="contact-heading" class="font-display text-3xl font-bold text-white sm:text-4xl">Ready to invest in Tagaytay?</h2>
+      <p data-template-id="contact-text" class="max-w-md leading-8 text-slate-300">Let's find the perfect property for you. Reach out today for a no-obligation consultation.</p>
+      <div class="space-y-3">
+       <a href="viber://chat?number=639750541424" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 rounded-2xl border border-slate-700 bg-slate-900/60 px-5 py-4 transition hover:border-amber-400/30">
+        <i data-lucide="phone" style="width:20px;height:20px;color:#fbbf24;"></i>
+        <span data-template-id="contact-phone-1" class="text-slate-200">0975 054 1424 (Viber)</span>
+       </a>
+       <a href="viber://chat?number=639933684179" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 rounded-2xl border border-slate-700 bg-slate-900/60 px-5 py-4 transition hover:border-amber-400/30">
+        <i data-lucide="message-circle" style="width:20px;height:20px;color:#fbbf24;"></i>
+        <span data-template-id="contact-phone-2" class="text-slate-200">0993 368 4179 (Viber)</span>
+       </a>
+       <a href="mailto:jewelvillafranca@gmail.com" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 rounded-2xl border border-slate-700 bg-slate-900/60 px-5 py-4 transition hover:border-amber-400/30">
+        <i data-lucide="mail" style="width:20px;height:20px;color:#fbbf24;"></i>
+        <span data-template-id="contact-email" class="text-amber-200">jewelvillafranca@gmail.com</span>
+       </a>
+       <div class="flex items-center gap-3 rounded-2xl border border-slate-700 bg-slate-900/60 px-5 py-4">
+        <i data-lucide="map-pin" style="width:20px;height:20px;color:#fbbf24;"></i>
+        <span data-template-id="contact-address" class="text-slate-300">4120 Brgy. Calabuso, Tagaytay City, Cavite, Philippines</span>
+       </div>
+      </div>
+     </div>
+     <form id="contact-form" class="space-y-4 rounded-[1.5rem] border border-slate-700 bg-slate-950/50 p-6">
+       <div>
+        <label data-template-id="form-name-label" for="form-name" class="mb-2 block text-sm font-medium text-slate-300">Your Name</label>
+        <input id="form-name" type="text" required class="w-full rounded-2xl border border-slate-700 bg-slate-900 px-4 py-3 text-white placeholder-slate-500 focus:border-amber-400 focus:outline-none" placeholder="Your name">
+       </div>
+       <div>
+        <label data-template-id="form-email-label" for="form-email" class="mb-2 block text-sm font-medium text-slate-300">Your Email</label>
+        <input id="form-email" type="email" required class="w-full rounded-2xl border border-slate-700 bg-slate-900 px-4 py-3 text-white placeholder-slate-500 focus:border-amber-400 focus:outline-none" placeholder="you@example.com">
+       </div>
+       <div>
+        <label data-template-id="form-message-label" for="form-message" class="mb-2 block text-sm font-medium text-slate-300">Your Message</label>
+        <textarea id="form-message" rows="4" required class="w-full rounded-2xl border border-slate-700 bg-slate-900 px-4 py-3 text-white placeholder-slate-500 focus:border-amber-400 focus:outline-none resize-none" placeholder="Tell me what you're looking for..."></textarea>
+       </div>
+       <button data-template-id="form-submit-btn" type="submit" class="w-full rounded-2xl bg-amber-400 px-6 py-3 font-bold text-slate-950 transition hover:bg-amber-300">Send Message</button>
+       <p id="form-success" class="hidden text-center text-sm text-emerald-400">Message sent! Opening your email client...</p>
       </form>
-     </div>
     </div>
    </section>
   </main>
-  <footer class="text-center py-8 border-t border-slate-800">
-   <p data-template-id="footer-text" class="canva-text text-sm opacity-50" style="color: rgb(100, 116, 139); font-weight: 400; font-style: normal; font-size: 16px;">© 2026 Carsheene Jewel B. Villafranca — Tagaytay Highlands Property Specialist</p>
+  <footer class="border-t border-slate-800/80 bg-slate-950/80">
+   <div class="max-w-7xl mx-auto px-6 py-8 text-center">
+    <p data-template-id="footer-text" class="text-sm text-slate-500">© 2026 Carsheene Jewel B. Villafranca — Tagaytay Highlands Property Specialist</p>
+   </div>
   </footer>
   <div id="gallery-modal" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-4">
    <div class="absolute inset-0 bg-black/70" onclick="closePropertyGallery()"></div>
