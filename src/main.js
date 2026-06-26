@@ -196,8 +196,8 @@ document.querySelector('#app').innerHTML = `
   <header class="relative overflow-hidden">
    <div class="hero-image absolute inset-0"></div>
    <div class="absolute inset-0 bg-gradient-to-b from-slate-950/35 via-slate-950/55 to-slate-950"></div>
-   <div class="relative max-w-7xl mx-auto px-6 py-14 lg:py-20">
-    <div class="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] items-center min-h-[680px]">
+  <div class="relative w-full px-4 py-14 sm:px-6 lg:px-10 xl:px-14 lg:py-20">
+   <div class="grid gap-10 xl:grid-cols-[1.08fr_0.92fr] items-center min-h-[680px]">
      <div class="max-w-3xl">
       <div class="hero-badge inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs uppercase tracking-[0.28em] text-amber-200">
        Tagaytay Highlands Property Specialist
@@ -245,7 +245,7 @@ document.querySelector('#app').innerHTML = `
    </div>
   </header>
   <main>
-     <section id="about" class="max-w-7xl mx-auto px-6 py-20 lg:py-24">
+    <section id="about" class="w-full px-4 py-20 sm:px-6 lg:px-10 xl:px-14 lg:py-24">
     <div class="grid gap-8 lg:grid-cols-[0.95fr_1.05fr] items-center">
      <div class="hero-card overflow-hidden rounded-[2rem]">
       <img data-template-id="agent-portrait" loading="lazy" class="h-full w-full object-cover" src="https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=1200" alt="Portrait of Jewel Villafranca">
@@ -275,7 +275,7 @@ document.querySelector('#app').innerHTML = `
      </div>
     </div>
    </section>
-   <section id="services" data-template-id="services-section" class="max-w-7xl mx-auto px-6 py-6 lg:py-10">
+  <section id="services" data-template-id="services-section" class="w-full px-4 py-6 sm:px-6 lg:px-10 xl:px-14 lg:py-10">
     <div class="mb-8 flex items-end justify-between gap-4">
      <div>
       <p class="section-kicker">Services</p>
@@ -312,7 +312,7 @@ document.querySelector('#app').innerHTML = `
       </div>
      </div>
    </section>
-   <section id="properties" data-template-id="properties-section" class="max-w-7xl mx-auto px-6 py-20 lg:py-24">
+  <section id="properties" data-template-id="properties-section" class="w-full px-4 py-20 sm:px-6 lg:px-10 xl:px-14 lg:py-24">
     <div class="mb-10 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
      <div>
       <p class="section-kicker">Featured Properties</p>
@@ -328,7 +328,7 @@ document.querySelector('#app').innerHTML = `
     </div>
     <div id="properties-grid" class="grid gap-6 md:grid-cols-2 xl:grid-cols-3"></div>
    </section>
-   <section id="contact" data-template-id="contact-section" class="max-w-7xl mx-auto px-6 pb-20 lg:pb-24">
+  <section id="contact" data-template-id="contact-section" class="w-full px-4 pb-20 sm:px-6 lg:px-10 xl:px-14 lg:pb-24">
     <div class="contact-card grid gap-8 rounded-[2rem] p-6 lg:grid-cols-[0.9fr_1.1fr] lg:p-8">
      <div class="space-y-6">
       <p class="section-kicker">Contact</p>
@@ -373,7 +373,7 @@ document.querySelector('#app').innerHTML = `
    </section>
   </main>
   <footer class="border-t border-slate-800/80 bg-slate-950/80">
-   <div class="max-w-7xl mx-auto px-6 py-8 text-center">
+  <div class="w-full px-4 py-8 text-center sm:px-6 lg:px-10 xl:px-14">
     <p data-template-id="footer-text" class="text-sm text-slate-500">© 2026 Carsheene Jewel B. Villafranca — Tagaytay Highlands Property Specialist</p>
    </div>
   </footer>

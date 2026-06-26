@@ -15,6 +15,8 @@
     .soft-grid { background-image: linear-gradient(rgba(148,163,184,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(148,163,184,0.06) 1px, transparent 1px); background-size: 24px 24px; }
     .table-row:hover { background-color: rgba(30, 41, 59, 0.7); }
     .focus-ring:focus { outline: none; box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.25); border-color: rgba(251, 191, 36, 0.85); }
+    .dropzone.dragover { border-color: rgba(251,191,36,0.9); background: rgba(251,191,36,0.08); }
+    .promo-card { border: 1px solid rgba(51,65,85,0.9); background: rgba(15,23,42,0.72); }
   </style>
 </head>
 <body class="min-h-screen bg-slate-900 text-slate-100">
@@ -83,11 +85,12 @@
 
         <aside class="rounded-3xl border border-slate-800 bg-slate-800/80 p-5 shadow-2xl shadow-black/20 lg:p-6">
           <div class="mb-6">
-            <h2 class="font-display text-2xl font-bold text-white">Add Property</h2>
-            <p class="mt-1 text-sm text-slate-400">Create a new listing and refresh the inventory instantly.</p>
+            <h2 id="form-title" class="font-display text-2xl font-bold text-white">Add Property</h2>
+            <p class="mt-1 text-sm text-slate-400">Create or edit a listing, then refresh the inventory instantly.</p>
           </div>
 
           <form id="property-form" class="space-y-4">
+            <input id="property-id" type="hidden" value="">
             <div>
               <label for="title" class="mb-1 block text-sm font-medium text-slate-300">Title</label>
               <input id="title" name="title" type="text" required class="focus-ring w-full rounded-xl border border-slate-700 bg-slate-900/80 px-4 py-3 text-white placeholder-slate-500" placeholder="The Woodlands">
@@ -128,6 +131,16 @@
             </div>
 
             <div>
+              <label for="blockLot" class="mb-1 block text-sm font-medium text-slate-300">Block & Lot</label>
+              <input id="blockLot" name="blockLot" type="text" class="focus-ring w-full rounded-xl border border-slate-700 bg-slate-900/80 px-4 py-3 text-white placeholder-slate-500" placeholder="Block 8, Lot 12">
+            </div>
+
+            <div>
+              <label for="paymentTerms" class="mb-1 block text-sm font-medium text-slate-300">Payment Terms</label>
+              <input id="paymentTerms" name="paymentTerms" type="text" class="focus-ring w-full rounded-xl border border-slate-700 bg-slate-900/80 px-4 py-3 text-white placeholder-slate-500" placeholder="Cash, bank financing, installment">
+            </div>
+
+            <div>
               <label for="location" class="mb-1 block text-sm font-medium text-slate-300">Location</label>
               <input id="location" name="location" type="text" class="focus-ring w-full rounded-xl border border-slate-700 bg-slate-900/80 px-4 py-3 text-white placeholder-slate-500" placeholder="Tagaytay Highlands, Cavite">
             </div>
@@ -138,15 +151,34 @@
             </div>
 
             <div class="space-y-3">
-              <p class="text-sm font-medium text-slate-300">Gallery URLs</p>
-              <input id="gallery1" name="gallery1" type="url" class="focus-ring w-full rounded-xl border border-slate-700 bg-slate-900/80 px-4 py-3 text-white placeholder-slate-500" placeholder="https://...">
-              <input id="gallery2" name="gallery2" type="url" class="focus-ring w-full rounded-xl border border-slate-700 bg-slate-900/80 px-4 py-3 text-white placeholder-slate-500" placeholder="https://...">
-              <input id="gallery3" name="gallery3" type="url" class="focus-ring w-full rounded-xl border border-slate-700 bg-slate-900/80 px-4 py-3 text-white placeholder-slate-500" placeholder="https://...">
+              <div class="flex items-center justify-between gap-3">
+                <p class="text-sm font-medium text-slate-300">Gallery Photos</p>
+                <button id="add-photo-btn" type="button" class="inline-flex items-center gap-2 rounded-lg border border-amber-400/30 bg-amber-400/10 px-3 py-2 text-xs font-semibold text-amber-200 transition hover:bg-amber-400/20">
+                  <i data-lucide="paperclip" class="h-3.5 w-3.5"></i>
+                  Attach Photos
+                </button>
+              </div>
+              <input id="gallery-picker" type="file" accept="image/*" multiple class="hidden">
+              <div id="dropzone" class="dropzone rounded-2xl border-2 border-dashed border-slate-700 bg-slate-900/60 px-4 py-6 text-center text-sm text-slate-400">
+                Drag and drop images here, or use Attach Photos to open your file manager.
+              </div>
+              <div id="gallery-preview" class="grid grid-cols-3 gap-3"></div>
+            </div>
+
+            <div class="space-y-4 rounded-2xl border border-slate-700 bg-slate-900/40 p-4">
+              <div class="flex items-center justify-between gap-3">
+                <div>
+                  <p class="text-sm font-semibold text-slate-200">Promotions</p>
+                  <p class="text-xs text-slate-400">Add up to 2 live promos with expiration timers.</p>
+                </div>
+                <button id="add-promo-btn" type="button" class="rounded-lg border border-amber-400/30 bg-amber-400/10 px-3 py-2 text-xs font-semibold text-amber-200 transition hover:bg-amber-400/20">Add Promo</button>
+              </div>
+              <div id="promo-list" class="space-y-3"></div>
             </div>
 
             <button type="submit" class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-amber-400 px-4 py-3 font-semibold text-slate-950 transition hover:bg-amber-300">
               <i data-lucide="plus" class="h-4 w-4"></i>
-              Save Property
+              <span id="submit-label">Save Property</span>
             </button>
           </form>
         </aside>
@@ -162,6 +194,15 @@
     const statTotal = document.getElementById('stat-total')
     const statAvailable = document.getElementById('stat-available')
     const statSoldOut = document.getElementById('stat-sold-out')
+    const formTitle = document.getElementById('form-title')
+    const submitLabel = document.getElementById('submit-label')
+    const galleryPicker = document.getElementById('gallery-picker')
+    const addPhotoBtn = document.getElementById('add-photo-btn')
+    const dropzone = document.getElementById('dropzone')
+    const galleryPreview = document.getElementById('gallery-preview')
+    const promoList = document.getElementById('promo-list')
+    const addPromoBtn = document.getElementById('add-promo-btn')
+    const propertyIdInput = document.getElementById('property-id')
 
     const statusOrder = ['Available', 'Pre-Selling', 'Sold Out']
 
@@ -169,6 +210,107 @@
       Available: 'bg-emerald-400/15 text-emerald-200 ring-1 ring-emerald-400/30',
       'Pre-Selling': 'bg-amber-400/15 text-amber-200 ring-1 ring-amber-400/30',
       'Sold Out': 'bg-rose-500/15 text-rose-200 ring-1 ring-rose-400/30',
+    }
+
+    let galleryFiles = []
+    let promoCount = 0
+
+    const defaultPromoRow = (promo = {}) => `
+      <div class="promo-card rounded-2xl p-4" data-promo-row>
+        <div class="grid gap-3 sm:grid-cols-2">
+          <div>
+            <label class="mb-1 block text-xs font-medium text-slate-300">Promo title</label>
+            <input data-promo-title type="text" class="focus-ring w-full rounded-xl border border-slate-700 bg-slate-950/70 px-3 py-2 text-sm text-white" placeholder="30% Promo" value="${promo.title ? String(promo.title).replaceAll('"', '&quot;') : ''}">
+          </div>
+          <div>
+            <label class="mb-1 block text-xs font-medium text-slate-300">Discount percent</label>
+            <input data-promo-percent type="number" min="1" max="100" class="focus-ring w-full rounded-xl border border-slate-700 bg-slate-950/70 px-3 py-2 text-sm text-white" placeholder="30" value="${promo.discountPercent ?? ''}">
+          </div>
+        </div>
+        <div class="mt-3 grid gap-3 sm:grid-cols-2">
+          <div>
+            <label class="mb-1 block text-xs font-medium text-slate-300">Ends on</label>
+            <input data-promo-expires type="date" class="focus-ring w-full rounded-xl border border-slate-700 bg-slate-950/70 px-3 py-2 text-sm text-white" value="${promo.expiresAt ?? ''}">
+          </div>
+          <div>
+            <label class="mb-1 block text-xs font-medium text-slate-300">Promo note</label>
+            <input data-promo-note type="text" class="focus-ring w-full rounded-xl border border-slate-700 bg-slate-950/70 px-3 py-2 text-sm text-white" placeholder="Until June 30" value="${promo.note ? String(promo.note).replaceAll('"', '&quot;') : ''}">
+          </div>
+        </div>
+        <div class="mt-3 flex justify-end">
+          <button type="button" data-remove-promo class="text-xs font-semibold text-rose-200 hover:text-rose-100">Remove promo</button>
+        </div>
+      </div>
+    `
+
+    const readPromos = () => {
+      return Array.from(promoList.querySelectorAll('[data-promo-row]'))
+        .map((row) => ({
+          title: row.querySelector('[data-promo-title]').value.trim(),
+          discountPercent: Number(row.querySelector('[data-promo-percent]').value),
+          expiresAt: row.querySelector('[data-promo-expires]').value,
+          note: row.querySelector('[data-promo-note]').value.trim(),
+        }))
+        .filter((promo) => promo.title || promo.discountPercent || promo.expiresAt || promo.note)
+        .slice(0, 2)
+    }
+
+    const renderPromoRows = (promos = []) => {
+      promoList.innerHTML = ''
+      const rows = (promos.length ? promos : [{}, {}]).slice(0, 2)
+      rows.forEach((promo) => {
+        promoList.insertAdjacentHTML('beforeend', defaultPromoRow(promo))
+      })
+      promoCount = promoList.querySelectorAll('[data-promo-row]').length
+    }
+
+    const escapeAttribute = (value) => String(value ?? '').replaceAll('&', '&amp;').replaceAll('"', '&quot;').replaceAll('<', '&lt;').replaceAll('>', '&gt;')
+
+    const setGalleryPreview = () => {
+      galleryPreview.innerHTML = ''
+      if (!galleryFiles.length) {
+        galleryPreview.innerHTML = '<p class="col-span-3 text-sm text-slate-500">No images selected yet.</p>'
+        return
+      }
+
+      galleryFiles.forEach((file, index) => {
+        const url = typeof file === 'string' ? file : URL.createObjectURL(file)
+        galleryPreview.insertAdjacentHTML('beforeend', `
+          <div class="overflow-hidden rounded-xl border border-slate-700 bg-slate-950/70">
+            <img src="${escapeAttribute(url)}" alt="Gallery preview ${index + 1}" class="h-28 w-full object-cover">
+          </div>
+        `)
+      })
+    }
+
+    const setEditMode = (property) => {
+      propertyIdInput.value = property.id
+      formTitle.textContent = 'Edit Property'
+      submitLabel.textContent = 'Update Property'
+      form.title.value = property.title || ''
+      form.type.value = property.propertyType || 'House & Lot'
+      form.status.value = property.status || 'Available'
+      form.price.value = property.price || ''
+      form.areaSqm.value = property.areaSqm || ''
+      form.blockLot.value = property.blockLot || ''
+      form.paymentTerms.value = property.paymentTerms || ''
+      form.location.value = property.location || ''
+      form.description.value = property.description || ''
+      galleryFiles = Array.isArray(property.gallery) ? [...property.gallery] : []
+      setGalleryPreview()
+      renderPromoRows(Array.isArray(property.promos) ? property.promos : [])
+    }
+
+    const resetEditor = () => {
+      propertyIdInput.value = ''
+      formTitle.textContent = 'Add Property'
+      submitLabel.textContent = 'Save Property'
+      form.reset()
+      form.type.value = 'House & Lot'
+      form.status.value = 'Available'
+      galleryFiles = []
+      renderPromoRows([{}, {}])
+      setGalleryPreview()
     }
 
     const formatPrice = (price) => {
@@ -219,6 +361,10 @@
         const type = property.propertyType || property.type || '—'
         const status = property.status || 'Available'
         const price = formatPrice(property.price)
+        const promos = Array.isArray(property.promos) ? property.promos : []
+        const promoText = promos.length
+          ? promos.map((promo) => `${promo.title || `${promo.discountPercent}% off`} until ${promo.expiresAt}`).join(' • ')
+          : 'No active promo'
 
         return `
           <tr class="table-row align-top transition-colors">
@@ -226,6 +372,7 @@
               <div class="space-y-1">
                 <p class="font-semibold text-white">${property.title || 'Untitled Property'}</p>
                 <p class="text-xs leading-5 text-slate-400">${property.location || 'Location not specified'}</p>
+                <p class="text-xs leading-5 text-slate-500">${property.blockLot || 'Block & Lot not set'}</p>
               </div>
             </td>
             <td class="px-4 py-4 text-sm text-slate-200">${type}</td>
@@ -234,7 +381,13 @@
             </td>
             <td class="px-4 py-4 text-sm font-medium text-slate-200">${price}</td>
             <td class="px-4 py-4">
-              <div class="flex flex-wrap gap-2">
+              <div class="flex flex-col gap-2">
+                <p class="text-xs leading-5 text-slate-400">${promoText}</p>
+                <div class="flex flex-wrap gap-2">
+                  <button type="button" data-action="edit" data-id="${property.id}" class="inline-flex items-center gap-2 rounded-lg border border-sky-400/30 bg-sky-400/10 px-3 py-2 text-xs font-semibold text-sky-200 transition hover:bg-sky-400/20">
+                    <i data-lucide="pencil" class="h-3.5 w-3.5"></i>
+                    Edit
+                  </button>
                 <button type="button" data-action="toggle" data-id="${property.id}" class="inline-flex items-center gap-2 rounded-lg border border-amber-400/30 bg-amber-400/10 px-3 py-2 text-xs font-semibold text-amber-200 transition hover:bg-amber-400/20">
                   <i data-lucide="refresh-cw" class="h-3.5 w-3.5"></i>
                   Toggle Status
@@ -255,32 +408,88 @@
     }
 
     const clearForm = () => {
-      form.reset()
+      resetEditor()
       form.querySelector('#type').value = 'House & Lot'
       form.querySelector('#status').value = 'Available'
     }
 
+    const fileListToArray = (fileList) => Array.from(fileList || [])
+
+    const appendFiles = (fileList) => {
+      galleryFiles = [...galleryFiles, ...fileListToArray(fileList)].slice(0, 200)
+      setGalleryPreview()
+    }
+
+    addPhotoBtn.addEventListener('click', () => galleryPicker.click())
+
+    galleryPicker.addEventListener('change', (event) => {
+      appendFiles(event.target.files)
+      galleryPicker.value = ''
+    })
+
+    dropzone.addEventListener('dragover', (event) => {
+      event.preventDefault()
+      dropzone.classList.add('dragover')
+    })
+
+    dropzone.addEventListener('dragleave', () => {
+      dropzone.classList.remove('dragover')
+    })
+
+    dropzone.addEventListener('drop', (event) => {
+      event.preventDefault()
+      dropzone.classList.remove('dragover')
+      appendFiles(event.dataTransfer.files)
+    })
+
+    addPromoBtn.addEventListener('click', () => {
+      if (promoList.querySelectorAll('[data-promo-row]').length >= 2) {
+        return
+      }
+      promoList.insertAdjacentHTML('beforeend', defaultPromoRow())
+    })
+
+    promoList.addEventListener('click', (event) => {
+      const removeButton = event.target.closest('[data-remove-promo]')
+      if (!removeButton) {
+        return
+      }
+
+      const rows = promoList.querySelectorAll('[data-promo-row]')
+      if (rows.length <= 1) {
+        return
+      }
+
+      removeButton.closest('[data-promo-row]')?.remove()
+    })
+
     form.addEventListener('submit', (event) => {
       event.preventDefault()
 
-      const gallery = [
-        form.gallery1.value.trim(),
-        form.gallery2.value.trim(),
-        form.gallery3.value.trim(),
-      ].filter(Boolean)
+      const gallery = galleryFiles.map((file) => {
+        if (typeof file === 'string') {
+          return file
+        }
+
+        return URL.createObjectURL(file)
+      }).filter(Boolean)
 
       saveProperty({
+        id: propertyIdInput.value || undefined,
         title: form.title.value.trim(),
         propertyType: form.type.value,
         status: form.status.value,
         price: form.price.value.trim(),
         location: form.location.value.trim(),
         areaSqm: form.areaSqm.value ? Number(form.areaSqm.value) : '',
+        blockLot: form.blockLot.value.trim(),
+        paymentTerms: form.paymentTerms.value.trim(),
         description: form.description.value.trim(),
         gallery,
+        promos: readPromos(),
       })
 
-      clearForm()
+      resetEditor()
       renderTable()
     })
 
@@ -298,6 +507,11 @@
         return
       }
 
+      if (action === 'edit') {
+        setEditMode(property)
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+      }
+
       if (action === 'toggle') {
         updatePropertyStatus(id, nextStatus(property.status || 'Available'))
         renderTable()
@@ -309,6 +523,7 @@
       }
     })
 
+    resetEditor()
     renderTable()
   </script>
 </body>
