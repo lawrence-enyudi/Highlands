@@ -140,6 +140,43 @@ document.querySelector('#app').innerHTML = `
     background: rgba(2, 6, 23, 0.5);
     backdrop-filter: blur(12px);
   }
+
+  .section-kicker {
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: rgba(251, 191, 36, 0.9);
+    font-size: 0.7rem;
+    font-weight: 700;
+  }
+
+  .section-heading {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    line-height: 1.05;
+    color: #fff;
+  }
+
+  .section-copy {
+    color: #cbd5e1;
+    line-height: 1.9;
+  }
+
+  .property-meta {
+    border-top: 1px solid rgba(51, 65, 85, 0.7);
+    background: linear-gradient(180deg, rgba(15, 23, 42, 0.72), rgba(2, 6, 23, 0.92));
+  }
+
+  .quick-pill {
+    border: 1px solid rgba(51, 65, 85, 0.9);
+    background: rgba(15, 23, 42, 0.72);
+    color: #e2e8f0;
+  }
+
+  .quick-pill.active {
+    border-color: rgba(251, 191, 36, 0.45);
+    background: rgba(251, 191, 36, 0.12);
+    color: #fde68a;
+  }
 </style>
 <div data-template-id="__page-root" class="page-shell w-full min-h-screen text-white">
   <nav class="topbar sticky top-0 w-full z-50">
@@ -188,7 +225,7 @@ document.querySelector('#app').innerHTML = `
      </div>
      <div class="lg:justify-self-end">
       <div class="hero-card rounded-[2rem] p-6 sm:p-8">
-       <p class="section-title">Featured Snapshot</p>
+       <p class="section-kicker">Featured Snapshot</p>
        <div class="mt-4 overflow-hidden rounded-[1.5rem] border border-slate-700/70">
         <img data-template-id="hero-image" loading="lazy" class="h-[340px] w-full object-cover" src="https://images.pexels.com/photos/6493861/pexels-photo-6493861.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=1920" alt="Breathtaking aerial view of Tagaytay's lush highlands and winding roads overlooking Taal Lake">
        </div>
@@ -208,17 +245,17 @@ document.querySelector('#app').innerHTML = `
    </div>
   </header>
   <main>
-   <section id="about" class="max-w-7xl mx-auto px-6 py-20 lg:py-24">
+     <section id="about" class="max-w-7xl mx-auto px-6 py-20 lg:py-24">
     <div class="grid gap-8 lg:grid-cols-[0.95fr_1.05fr] items-center">
      <div class="hero-card overflow-hidden rounded-[2rem]">
       <img data-template-id="agent-portrait" loading="lazy" class="h-full w-full object-cover" src="https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=1200" alt="Portrait of Jewel Villafranca">
      </div>
      <div class="space-y-6">
       <div>
-       <p class="section-title">About Jewel</p>
-       <h2 data-template-id="about-heading" class="font-display mt-3 text-4xl font-bold text-white sm:text-5xl">A premium property presentation built around trust and clarity</h2>
+       <p class="section-kicker">About Jewel</p>
+       <h2 data-template-id="about-heading" class="section-heading mt-3 text-4xl sm:text-5xl">A premium property presentation built around trust and clarity</h2>
       </div>
-      <p data-template-id="about-text" class="max-w-2xl text-lg leading-8 text-slate-300">With years of dedicated experience in Tagaytay Highlands real estate, I help clients find their perfect property whether it is a serene weekend retreat, a sound investment lot, or a luxury residence with breathtaking views of Taal Lake.</p>
+      <p data-template-id="about-text" class="section-copy max-w-2xl text-lg">With years of dedicated experience in Tagaytay Highlands real estate, I help clients find their perfect property whether it is a serene weekend retreat, a sound investment lot, or a luxury residence with breathtaking views of Taal Lake.</p>
       <p data-template-id="about-text-2" class="max-w-2xl text-base leading-8 text-slate-400">From site visits to paperwork, I provide end-to-end guidance so you can focus on envisioning your new life in the highlands.</p>
       <div class="grid gap-4 sm:grid-cols-3">
        <div class="info-card rounded-2xl p-5">
@@ -241,8 +278,8 @@ document.querySelector('#app').innerHTML = `
    <section id="services" data-template-id="services-section" class="max-w-7xl mx-auto px-6 py-6 lg:py-10">
     <div class="mb-8 flex items-end justify-between gap-4">
      <div>
-      <p class="section-title">Services</p>
-      <h2 data-template-id="services-heading" class="font-display mt-3 text-3xl font-bold text-white sm:text-4xl">Concise support from search to signing</h2>
+      <p class="section-kicker">Services</p>
+      <h2 data-template-id="services-heading" class="section-heading mt-3 text-3xl sm:text-4xl">Concise support from search to signing</h2>
      </div>
     </div>
     <div class="grid gap-6 lg:grid-cols-3">
@@ -278,18 +315,24 @@ document.querySelector('#app').innerHTML = `
    <section id="properties" data-template-id="properties-section" class="max-w-7xl mx-auto px-6 py-20 lg:py-24">
     <div class="mb-10 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
      <div>
-      <p class="section-title">Featured Properties</p>
-      <h2 data-template-id="properties-heading" class="font-display mt-3 text-3xl font-bold text-white sm:text-4xl">Current listings in the Highlands</h2>
+      <p class="section-kicker">Featured Properties</p>
+      <h2 data-template-id="properties-heading" class="section-heading mt-3 text-3xl sm:text-4xl">Current listings in the Highlands</h2>
      </div>
      <p class="max-w-xl text-sm leading-7 text-slate-400">Tap a listing to view the gallery and availability details. Sold out items are clearly marked with a visual overlay.</p>
+    </div>
+    <div class="mb-6 flex flex-wrap gap-3">
+     <button class="quick-pill active rounded-full px-4 py-2 text-sm font-semibold" type="button" data-filter="all">All</button>
+     <button class="quick-pill rounded-full px-4 py-2 text-sm font-semibold" type="button" data-filter="Available">Available</button>
+     <button class="quick-pill rounded-full px-4 py-2 text-sm font-semibold" type="button" data-filter="Pre-Selling">Pre-Selling</button>
+     <button class="quick-pill rounded-full px-4 py-2 text-sm font-semibold" type="button" data-filter="Sold Out">Sold Out</button>
     </div>
     <div id="properties-grid" class="grid gap-6 md:grid-cols-2 xl:grid-cols-3"></div>
    </section>
    <section id="contact" data-template-id="contact-section" class="max-w-7xl mx-auto px-6 pb-20 lg:pb-24">
     <div class="contact-card grid gap-8 rounded-[2rem] p-6 lg:grid-cols-[0.9fr_1.1fr] lg:p-8">
      <div class="space-y-6">
-      <p class="section-title">Contact</p>
-      <h2 data-template-id="contact-heading" class="font-display text-3xl font-bold text-white sm:text-4xl">Ready to invest in Tagaytay?</h2>
+      <p class="section-kicker">Contact</p>
+      <h2 data-template-id="contact-heading" class="section-heading text-3xl sm:text-4xl">Ready to invest in Tagaytay?</h2>
       <p data-template-id="contact-text" class="max-w-md leading-8 text-slate-300">Let's find the perfect property for you. Reach out today for a no-obligation consultation.</p>
       <div class="space-y-3">
        <a href="viber://chat?number=639750541424" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 rounded-2xl border border-slate-700 bg-slate-900/60 px-5 py-4 transition hover:border-amber-400/30">
@@ -410,18 +453,23 @@ const renderPropertiesGrid = () => {
     return
   }
 
+  const activeFilter = document.querySelector('[data-filter].active')?.dataset.filter || 'all'
   const properties = getProperties()
+  const filteredProperties = activeFilter === 'all'
+    ? properties
+    : properties.filter((property) => property.status === activeFilter)
+
   propertiesGrid.innerHTML = ''
 
-  properties.forEach((property) => {
+  filteredProperties.forEach((property) => {
     const previewImage = property.gallery?.[0] || 'https://images.pexels.com/photos/6493861/pexels-photo-6493861.jpeg?auto=compress&cs=tinysrgb&w=1200'
     const soldOut = property.status === 'Sold Out'
     const title = `${escapeHtml(property.title)} – ${escapeHtml(property.propertyType)}`
 
     propertiesGrid.insertAdjacentHTML('beforeend', `
-      <button onclick="openPropertyGallery('${escapeHtml(property.id)}')" class="prop-card relative rounded-xl overflow-hidden bg-slate-800 shadow-xl text-left hover:shadow-2xl transition-shadow duration-300 cursor-pointer">
+      <button onclick="openPropertyGallery('${escapeHtml(property.id)}')" class="prop-card relative overflow-hidden rounded-[1.75rem] border border-slate-800 bg-slate-900/85 text-left shadow-xl transition-shadow duration-300 cursor-pointer">
         <div class="relative">
-          <img data-template-id="${escapeHtml(property.id)}-img" loading="lazy" class="canva-image w-full h-56 object-cover" src="${escapeHtml(previewImage)}" alt="${title}">
+          <img data-template-id="${escapeHtml(property.id)}-img" loading="lazy" class="h-64 w-full object-cover" src="${escapeHtml(previewImage)}" alt="${title}">
           ${soldOut ? `
             <div class="absolute inset-0 bg-slate-950/70"></div>
             <div class="absolute inset-0 flex items-center justify-center">
@@ -430,9 +478,9 @@ const renderPropertiesGrid = () => {
           ` : ''}
         </div>
         <div class="p-5">
-          <h3 data-template-id="${escapeHtml(property.id)}-title" class="canva-text font-bold" style="color: rgb(255, 255, 255); font-weight: 700; font-style: normal; font-size: 19px;">${title}</h3>
-          <p data-template-id="${escapeHtml(property.id)}-desc" class="canva-text mt-2 text-sm opacity-75" style="color: rgb(148, 163, 184); font-weight: 400; font-style: normal; font-size: 16px;">${escapeHtml(property.description)}</p>
-          <div class="mt-3 flex items-center justify-between gap-3">
+          <h3 data-template-id="${escapeHtml(property.id)}-title" class="text-xl font-bold text-white">${title}</h3>
+          <p data-template-id="${escapeHtml(property.id)}-desc" class="mt-2 text-sm leading-7 text-slate-400">${escapeHtml(property.description)}</p>
+          <div class="mt-4 flex items-center justify-between gap-3">
             <span class="inline-block text-amber-400 text-sm font-medium">View Gallery →</span>
             <span class="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold ${soldOut ? 'bg-rose-500/15 text-rose-200' : property.status === 'Pre-Selling' ? 'bg-amber-500/15 text-amber-200' : 'bg-emerald-500/15 text-emerald-200'}">${escapeHtml(property.status)}</span>
           </div>
@@ -508,6 +556,14 @@ window.closePropertyGallery = closePropertyGallery
 window.openViewingModal = openViewingModal
 window.openViewingModalFromGallery = openViewingModalFromGallery
 window.closeViewingModal = closeViewingModal
+
+document.querySelectorAll('[data-filter]').forEach((button) => {
+  button.addEventListener('click', () => {
+    document.querySelectorAll('[data-filter]').forEach((item) => item.classList.remove('active'))
+    button.classList.add('active')
+    renderPropertiesGrid()
+  })
+})
 
 document.getElementById('mobile-menu-btn').addEventListener('click', () => {
   document.getElementById('mobile-menu').classList.toggle('hidden')
